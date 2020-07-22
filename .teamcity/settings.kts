@@ -64,7 +64,7 @@ object Build : BuildType({
         param("org.jfrog.artifactory.selectedDeployableServer.deployArtifacts", "true")
         param("org.jfrog.artifactory.selectedDeployableServer.targetRepo", "Devops")
     }
-        script {
+    script {
         name = "Download-Artifactory"
         scriptContent = """
             echo "Hi This Is CHAKRADHAR"
