@@ -35,6 +35,7 @@ project {
     vcsRoot(CompleteDevOpsvcs)
     description = "This a sample kotlin demo project pipeline as a code edited in vcs."
     buildType(Build)
+    buildType(Build_1)
 }
 
 object Build : BuildType({
@@ -65,13 +66,7 @@ object Build : BuildType({
         param("org.jfrog.artifactory.selectedDeployableServer.deployArtifacts", "true")
         param("org.jfrog.artifactory.selectedDeployableServer.targetRepo", "Devops")
     }
-        script {
-        name = "Download-Artifactory"
-        scriptContent = "curl -u admin:AKCp5fUDpkeBGfcYv8y16nFWUqCM42d6FPnMYmG8nyK4ehRRgEkhfkmAPPmWBUjzGP35yC5Np http://localhost:8082/artifactory/Devops/com/mindtree/devops/0.0.1-SNAPSHOT/devops-0.0.1-SNAPSHOT.war -o /home/cloud_user/artifactory/ROOT.war"
-        param("org.jfrog.artifactory.selectedDeployableServer.downloadSpecSource", "Job configuration")
-        param("org.jfrog.artifactory.selectedDeployableServer.useSpecs", "false")
-        param("org.jfrog.artifactory.selectedDeployableServer.uploadSpecSource", "Job configuration")
-    }
+        
     }
     triggers {
         vcs {
@@ -83,6 +78,33 @@ object CompleteDevOpsvcs : GitVcsRoot({
     name = "CompleteDevOpsvcs"
     url = "https://github.com/chakri1998/completedevops.git"
 })
+
+object Build_1 : BuildType({
+    name = "CompleteDevOps_Kotlin_Pipeline_Deployment"
+    description = "This a sample kotlin demo project pipeline as a code edited in vcs only CD will takes place."
+    steps {
+        script {
+        name = "Download-Artifactory"
+        scriptContent = "curl -u admin:AKCp5fUDpkeBGfcYv8y16nFWUqCM42d6FPnMYmG8nyK4ehRRgEkhfkmAPPmWBUjzGP35yC5Np http://localhost:8082/artifactory/Devops/com/mindtree/devops/0.0.1-SNAPSHOT/devops-0.0.1-SNAPSHOT.war -o /home/cloud_user/artifactory/ROOT.war"
+        param("org.jfrog.artifactory.selectedDeployableServer.downloadSpecSource", "Job configuration")
+        param("org.jfrog.artifactory.selectedDeployableServer.useSpecs", "false")
+        param("org.jfrog.artifactory.selectedDeployableServer.uploadSpecSource", "Job configuration")
+    }
+    }
+    triggers {
+        finishBuildTrigger {
+            buildType = "${Build.id}"
+            successfulOnly = true
+        }
+    }
+
+    dependencies {
+        snapshot(CompleteDevOps_Kotlin_Pipeline) {
+        }
+    }
+})
+        
+        
 fun wrapWithFeature(buildType: BuildType, featureBlock: BuildFeatures.() -> Unit): BuildType {
     buildType.features {
         featureBlock()
