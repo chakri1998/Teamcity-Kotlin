@@ -100,7 +100,7 @@ object Build_1 : BuildType({
     }
 
     dependencies {
-        snapshot(CompleteDevOps_Kotlin_Pipeline) {
+        snapshot(Build) {
         }
     }
 })
