@@ -56,6 +56,13 @@ object Build : BuildType({
         goals = "install"
         pomLocation = "devops/pom.xml"
         jdkHome = "%env.JDK_18%"
+        param("org.jfrog.artifactory.selectedDeployableServer.publishBuildInfo", "true")
+        param("org.jfrog.artifactory.selectedDeployableServer.defaultModuleVersionConfiguration", "GLOBAL")
+        param("org.jfrog.artifactory.selectedDeployableServer.urlId", "0")
+        param("org.jfrog.artifactory.selectedDeployableServer.envVarsExcludePatterns", "*password*,*secret*")
+        param("org.jfrog.artifactory.selectedDeployableServer.targetSnapshotRepo", "Devops")
+        param("org.jfrog.artifactory.selectedDeployableServer.deployArtifacts", "true")
+        param("org.jfrog.artifactory.selectedDeployableServer.targetRepo", "Devops")
     }
     }
     triggers {
