@@ -37,7 +37,7 @@ project {
 }
 
 object Build : BuildType({
-    name = "Build"
+    name = "CompleteDevOps_Kotlin_Pipeline"
     artifactRules = "target/*jar"
     vcs {
         root(CompleteDevOpsvcs)
