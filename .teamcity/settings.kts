@@ -47,11 +47,14 @@ object Build : BuildType({
            maven {
         name = "Maven-Clean"
         goals = "clean"
+        pomLocation = "devops/pom.xml"
         jdkHome = "%env.JDK_18%"
+        
     }
     maven {
         name = "Maven-Install"
         goals = "install"
+        pomLocation = "devops/pom.xml"
         jdkHome = "%env.JDK_18%"
     }
     }
