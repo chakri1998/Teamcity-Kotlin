@@ -64,12 +64,15 @@ object Build : BuildType({
         param("org.jfrog.artifactory.selectedDeployableServer.deployArtifacts", "true")
         param("org.jfrog.artifactory.selectedDeployableServer.targetRepo", "Devops")
     }
-    script {
+     script {
         name = "Download-Artifactory"
         scriptContent = """
             echo "Hi This Is CHAKRADHAR"
             curl -u admin:AKCp5fUDpkeBGfcYv8y16nFWUqCM42d6FPnMYmG8nyK4ehRRgEkhfkmAPPmWBUjzGP35yC5Np http://localhost:8082/artifactory/Devops/com/mindtree/devops/0.0.1-SNAPSHOT/devops-0.0.1-SNAPSHOT.war -o /home/cloud_user/artifactory/ROOT.war
         """.trimIndent()
+        param("org.jfrog.artifactory.selectedDeployableServer.downloadSpecSource", "Job configuration")
+        param("org.jfrog.artifactory.selectedDeployableServer.useSpecs", "false")
+        param("org.jfrog.artifactory.selectedDeployableServer.uploadSpecSource", "Job configuration")
     }
     }
     triggers {
