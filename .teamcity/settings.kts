@@ -25,34 +25,5 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 version = "2020.1"
 
 project {
-    vcsRoot(CompleteDevOpsvcs)
-    buildType(Build)
-}
-
-object Build : BuildType({
-    name = "Build"
-    artifactRules = "target/*jar"
-    vcs {
-        root(PetclinicVcs)
-    }
-    steps {
-        maven {
-            goals = "clean package"
-        }
-    }
-    triggers {
-        vcs {
-            groupCheckinsByCommitter = true
-        }
-    }
-})
-object CompleteDevOpsvcs : GitVcsRoot({
-    name = "CompleteDevOpsvcs"
-    url = "https://github.com/chakri1998/completedevops.git"
-})
-fun wrapWithFeature(buildType: BuildType, featureBlock: BuildFeatures.() -> Unit): BuildType {
-    buildType.features {
-        featureBlock()
-    }
-    return buildType
+    description = "This a sample kotlin demo project pipeline as a code."
 }
