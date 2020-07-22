@@ -47,10 +47,12 @@ object Build : BuildType({
            maven {
         name = "Maven-Clean"
         goals = "clean"
+        jdkHome = "%env.JDK_18%"
     }
     maven {
         name = "Maven-Install"
         goals = "install"
+        jdkHome = "%env.JDK_18%"
     }
     }
     triggers {
