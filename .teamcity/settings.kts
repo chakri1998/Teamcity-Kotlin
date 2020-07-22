@@ -42,7 +42,7 @@ project {
 object Build : BuildType({
     name = "CompleteDevOps_Kotlin_Pipeline"
     description = "This a sample kotlin demo project pipeline as a code edited in vcs only CI will takes place."
-    artifactRules = "devops/target/*.war => /home/cloud_user/artifactory/"
+    artifactRules = "devops/target/*.war => /home/cloud_user/internal_artifactory"
     vcs {
         root(CompleteDevOpsvcs)
     }
