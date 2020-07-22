@@ -43,10 +43,14 @@ object Build : BuildType({
         root(CompleteDevOpsvcs)
     }
     steps {
-        maven {
-            Step name = "Maven clean package"
-            goals = "clean package"
-        }
+           maven {
+        name = "Maven-Clean"
+        goals = "clean"
+    }
+    maven {
+        name = "Maven-Install"
+        goals = "install"
+    }
     }
     triggers {
         vcs {
