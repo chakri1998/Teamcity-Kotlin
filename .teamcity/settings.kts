@@ -44,6 +44,7 @@ object Build : BuildType({
     }
     steps {
         maven {
+            Step name = "Maven clean package"
             goals = "clean package"
         }
     }
