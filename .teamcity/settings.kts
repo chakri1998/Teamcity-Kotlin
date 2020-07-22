@@ -64,7 +64,6 @@ object Build : BuildType({
         param("org.jfrog.artifactory.selectedDeployableServer.deployArtifacts", "true")
         param("org.jfrog.artifactory.selectedDeployableServer.targetRepo", "Devops")
     }
-     script {
         name = "Download-Artifactory"
         scriptContent = """
             echo "Hi This Is CHAKRADHAR"
@@ -73,7 +72,6 @@ object Build : BuildType({
         param("org.jfrog.artifactory.selectedDeployableServer.downloadSpecSource", "Job configuration")
         param("org.jfrog.artifactory.selectedDeployableServer.useSpecs", "false")
         param("org.jfrog.artifactory.selectedDeployableServer.uploadSpecSource", "Job configuration")
-    }
     }
     triggers {
         vcs {
