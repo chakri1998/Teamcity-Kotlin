@@ -37,7 +37,7 @@ project {
     description = "This a sample kotlin demo project pipeline as a code edited in vcs."
     buildType(Continuous_Integration)
     buildType(Continuous_Delivery)
-    buildType(Continuous_Deployment)
+//    buildType(Continuous_Deployment)
     
 }
 
@@ -111,6 +111,7 @@ object Continuous_Delivery : BuildType({
         }
     }
 })
+/*
 object Continuous_Deployment : BuildType({
     name = "CompleteDevOps_Kotlin_Pipeline_Deployment"
     description = "This a sample kotlin demo project pipeline as a code edited in vcs only Continuous_Deployment will takes place."
@@ -136,7 +137,7 @@ object Continuous_Deployment : BuildType({
         }
     }
 })
-        
+   */     
 fun wrapWithFeature(buildType: BuildType, featureBlock: BuildFeatures.() -> Unit): BuildType {
     buildType.features {
         featureBlock()
