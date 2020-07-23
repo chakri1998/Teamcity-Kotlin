@@ -91,7 +91,7 @@ object Continuous_Delivery : BuildType({
     }
         step {
             name = "Download-Artifactory-Meta-Runner"
-            type = "Completedevops_CdDeployment"
+            type = "DOWNLOADARTIFACTORY"
         }
     }
     triggers {
