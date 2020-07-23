@@ -35,13 +35,15 @@ version = "2020.1"
 project {
     vcsRoot(CompleteDevOpsvcs)
     description = "This a sample kotlin demo project pipeline as a code edited in vcs."
-    buildType(Build)
-    buildType(Build_1)
+    buildType(Continuous_Integration)
+    buildType(Continuous_Delivery)
+    buildType(Continuous_Deployment)
+    
 }
 
-object Build : BuildType({
-    name = "CompleteDevOps_Kotlin_Pipeline"
-    description = "This a sample kotlin demo project pipeline as a code edited in vcs only CI will takes place."
+object Continuous_Integration : BuildType({
+    name = "CompleteDevOps_Kotlin_Pipeline_Integration"
+    description = "This a sample kotlin demo project pipeline as a code edited in vcs only Continuous_Integration will takes place."
     artifactRules = "devops/target/*.war => /home/cloud_user/internal_artifactory"
     vcs {
         root(CompleteDevOpsvcs)
@@ -80,17 +82,22 @@ object CompleteDevOpsvcs : GitVcsRoot({
     url = "https://github.com/chakri1998/completedevops.git"
 })
 
-object Build_1 : BuildType({
-    name = "CompleteDevOps_Kotlin_Pipeline_Deployment"
-    description = "This a sample kotlin demo project pipeline as a code edited in vcs only CD will takes place."
+object Continuous_Delivery : BuildType({
+    name = "CompleteDevOps_Kotlin_Pipeline_Delivery"
+    description = "This a sample kotlin demo project pipeline as a code edited in vcs only Continuous_Delivery will takes place."
     steps {
         script {
-        name = "Download-Artifactory"
+        enabled = false
+        name = "Download-Artifactory-Command-Line"
         scriptContent = "curl -u admin:AKCp5fUDpkeBGfcYv8y16nFWUqCM42d6FPnMYmG8nyK4ehRRgEkhfkmAPPmWBUjzGP35yC5Np http://localhost:8082/artifactory/Devops/com/mindtree/devops/0.0.1-SNAPSHOT/devops-0.0.1-SNAPSHOT.war -o /home/cloud_user/artifactory/ROOT.war"
         param("org.jfrog.artifactory.selectedDeployableServer.downloadSpecSource", "Job configuration")
         param("org.jfrog.artifactory.selectedDeployableServer.useSpecs", "false")
         param("org.jfrog.artifactory.selectedDeployableServer.uploadSpecSource", "Job configuration")
     }
+        step {
+            name = "Download-Artifactory-Meta-Runner"
+            type = "Completedevops_CdDeployment"
+        }
     }
     triggers {
         finishBuildTrigger {
@@ -100,11 +107,35 @@ object Build_1 : BuildType({
     }
 
     dependencies {
-        snapshot(Build) {
+        snapshot(Continuous_Integration) {
         }
     }
 })
-        
+object Continuous_Deployment : BuildType({
+    name = "CompleteDevOps_Kotlin_Pipeline_Deployment"
+    description = "This a sample kotlin demo project pipeline as a code edited in vcs only Continuous_Deployment will takes place."
+    steps {
+        script {
+        enabled = false
+        name = "Deploy-Through-Ansible-Command-Line"
+        scriptContent = "curl -u admin:AKCp5fUDpkeBGfcYv8y16nFWUqCM42d6FPnMYmG8nyK4ehRRgEkhfkmAPPmWBUjzGP35yC5Np http://localhost:8082/artifactory/Devops/com/mindtree/devops/0.0.1-SNAPSHOT/devops-0.0.1-SNAPSHOT.war -o /home/cloud_user/artifactory/ROOT.war"
+        param("org.jfrog.artifactory.selectedDeployableServer.downloadSpecSource", "Job configuration")
+        param("org.jfrog.artifactory.selectedDeployableServer.useSpecs", "false")
+        param("org.jfrog.artifactory.selectedDeployableServer.uploadSpecSource", "Job configuration")
+    } 
+    }
+        triggers {
+        finishBuildTrigger {
+            buildType = "${Build.id}"
+            successfulOnly = true
+        }
+    }
+    
+    dependencies {
+        snapshot(Continuous_Delivery) {
+        }
+    }
+})
         
 fun wrapWithFeature(buildType: BuildType, featureBlock: BuildFeatures.() -> Unit): BuildType {
     buildType.features {
