@@ -13,17 +13,12 @@ The settings script is an entry point for defining a TeamCity
 project hierarchy. The script should contain a single call to the
 project() function with a Project instance or an init function as
 an argument.
-
 VcsRoots, BuildTypes, Templates, and subprojects can be
 registered inside the project using the vcsRoot(), buildType(),
 template(), and subProject() methods respectively.
-
 To debug settings scripts in command-line, run the
-
     mvnDebug org.jetbrains.teamcity:teamcity-configs-maven-plugin:generate
-
 command and attach your debugger to the port 8000.
-
 To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 -> Tool Windows -> Maven Projects), find the generate task node
 (Plugins -> teamcity-configs -> teamcity-configs:generate), the
@@ -37,13 +32,11 @@ project {
     description = "This a sample kotlin demo project pipeline as a code edited in vcs."
     buildType(Build_Continuous_Integration)
     buildType(Build_Continuous_Delivery)
-//    buildType(Build_Continuous_Deployment)
-    
 }
 
 object Build_Continuous_Integration : BuildType({
-    name = "CompleteDevOps_Kotlin_Pipeline_Integration"
-    description = "This a sample kotlin demo project pipeline as a code edited in vcs only Continuous_Integration will takes place."
+    name = "CompleteDevOps_Kotlin_Pipeline"
+    description = "This a sample kotlin demo project pipeline as a code edited in vcs only CI will takes place."
     artifactRules = "devops/target/*.war => /home/cloud_user/internal_artifactory"
     vcs {
         root(CompleteDevOpsvcs)
@@ -81,23 +74,17 @@ object CompleteDevOpsvcs : GitVcsRoot({
     name = "CompleteDevOpsvcs"
     url = "https://github.com/chakri1998/completedevops.git"
 })
-
 object Build_Continuous_Delivery : BuildType({
-    name = "CompleteDevOps_Kotlin_Pipeline_Delivery"
-    description = "This a sample kotlin demo project pipeline as a code edited in vcs only Continuous_Delivery will takes place."
+    name = "CompleteDevOps_Kotlin_Pipeline_Deployment"
+    description = "This a sample kotlin demo project pipeline as a code edited in vcs only CD will takes place."
     steps {
         script {
-        enabled = false
-        name = "Download-Artifactory-Command-Line"
+        name = "Download-Artifactory"
         scriptContent = "curl -u admin:AKCp5fUDpkeBGfcYv8y16nFWUqCM42d6FPnMYmG8nyK4ehRRgEkhfkmAPPmWBUjzGP35yC5Np http://localhost:8082/artifactory/Devops/com/mindtree/devops/0.0.1-SNAPSHOT/devops-0.0.1-SNAPSHOT.war -o /home/cloud_user/artifactory/ROOT.war"
         param("org.jfrog.artifactory.selectedDeployableServer.downloadSpecSource", "Job configuration")
         param("org.jfrog.artifactory.selectedDeployableServer.useSpecs", "false")
         param("org.jfrog.artifactory.selectedDeployableServer.uploadSpecSource", "Job configuration")
     }
-        step {
-            name = "Download-Artifactory-Meta-Runner"
-            type = "Completedevops_CdDeployment"
-        }
     }
     triggers {
         finishBuildTrigger {
@@ -105,39 +92,13 @@ object Build_Continuous_Delivery : BuildType({
             successfulOnly = true
         }
     }
-
     dependencies {
-        snapshot(Continuous_Integration) {
+        snapshot(Build_Continuous_Integration) {
         }
     }
 })
-/*
-object Build_Continuous_Deployment : BuildType({
-    name = "CompleteDevOps_Kotlin_Pipeline_Deployment"
-    description = "This a sample kotlin demo project pipeline as a code edited in vcs only Continuous_Deployment will takes place."
-    steps {
-        script {
-        enabled = false
-        name = "Deploy-Through-Ansible-Command-Line"
-        scriptContent = "curl -u admin:AKCp5fUDpkeBGfcYv8y16nFWUqCM42d6FPnMYmG8nyK4ehRRgEkhfkmAPPmWBUjzGP35yC5Np http://localhost:8082/artifactory/Devops/com/mindtree/devops/0.0.1-SNAPSHOT/devops-0.0.1-SNAPSHOT.war -o /home/cloud_user/artifactory/ROOT.war"
-        param("org.jfrog.artifactory.selectedDeployableServer.downloadSpecSource", "Job configuration")
-        param("org.jfrog.artifactory.selectedDeployableServer.useSpecs", "false")
-        param("org.jfrog.artifactory.selectedDeployableServer.uploadSpecSource", "Job configuration")
-    } 
-    }
-        triggers {
-        finishBuildTrigger {
-            buildType = "${Build.id}"
-            successfulOnly = true
-        }
-    }
-    
-    dependencies {
-        snapshot(Continuous_Delivery) {
-        }
-    }
-})
-   */     
+        
+        
 fun wrapWithFeature(buildType: BuildType, featureBlock: BuildFeatures.() -> Unit): BuildType {
     buildType.features {
         featureBlock()
