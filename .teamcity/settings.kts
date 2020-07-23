@@ -35,13 +35,13 @@ version = "2020.1"
 project {
     vcsRoot(CompleteDevOpsvcs)
     description = "This a sample kotlin demo project pipeline as a code edited in vcs."
-    buildType(Continuous_Integration)
-    buildType(Continuous_Delivery)
-//    buildType(Continuous_Deployment)
+    buildType(Build_Continuous_Integration)
+    buildType(Build_Continuous_Delivery)
+//    buildType(Build_Continuous_Deployment)
     
 }
 
-object Continuous_Integration : BuildType({
+object Build_Continuous_Integration : BuildType({
     name = "CompleteDevOps_Kotlin_Pipeline_Integration"
     description = "This a sample kotlin demo project pipeline as a code edited in vcs only Continuous_Integration will takes place."
     artifactRules = "devops/target/*.war => /home/cloud_user/internal_artifactory"
@@ -82,7 +82,7 @@ object CompleteDevOpsvcs : GitVcsRoot({
     url = "https://github.com/chakri1998/completedevops.git"
 })
 
-object Continuous_Delivery : BuildType({
+object Build_Continuous_Delivery : BuildType({
     name = "CompleteDevOps_Kotlin_Pipeline_Delivery"
     description = "This a sample kotlin demo project pipeline as a code edited in vcs only Continuous_Delivery will takes place."
     steps {
@@ -112,7 +112,7 @@ object Continuous_Delivery : BuildType({
     }
 })
 /*
-object Continuous_Deployment : BuildType({
+object Build_Continuous_Deployment : BuildType({
     name = "CompleteDevOps_Kotlin_Pipeline_Deployment"
     description = "This a sample kotlin demo project pipeline as a code edited in vcs only Continuous_Deployment will takes place."
     steps {
