@@ -88,7 +88,7 @@ object Build_Continuous_Delivery : BuildType({
     }
     triggers {
         finishBuildTrigger {
-            buildType = "${Build.id}"
+            buildType = "${Build_Continuous_Integration.id}"
             successfulOnly = true
         }
     }
